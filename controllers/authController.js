@@ -33,7 +33,7 @@ exports.signup = async (req, res) => {
         });
 
         // Generate JWT token for the new user
-        const token = jwt.sign({ id: newAdmin.id, userId: newAdmin.userId }, JWT_SECRET, {
+        const token = jwt.sign({ id: newAdmin.id, userId: newAdmin.userId },process.env.JWT_SECRET, {
             expiresIn: '1h'
         });
 
