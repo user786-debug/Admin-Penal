@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db'); // Adjust the path to your Sequelize instance
+const { supportManagerCount } = require('../controllers/supportManagersController');
 
 const SupportManager = sequelize.define(
     'SupportManager',
@@ -45,6 +46,7 @@ const SupportManager = sequelize.define(
         },
     },
     {
+        tableName:'supportmanagers',
         timestamps: true, // Adds createdAt and updatedAt fields
         paranoid: true, // Adds deletedAt field for soft deletes
     }

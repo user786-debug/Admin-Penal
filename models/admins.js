@@ -43,7 +43,8 @@ const Admin = sequelize.define('Admin', {
     //     onUpdate: DataTypes.NOW
     // }
 }, {
-    timestamps: false, // Disable automatic timestamp fields
+    tableName: 'admins',
+    timestamps: true, // Disable automatic timestamp fields
     paranoid: true // Enable paranoid for soft delete
 });
 
