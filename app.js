@@ -10,7 +10,7 @@ const VersionControl = require("./models/versionControl");
 const User = require("./models/users");
 const SupportManager = require("./models/supportManagers");
 const Manager = require("./models/starsManagers");
-const Star = require("./models/Star");
+const Star = require("./models/stars");
 const PolicyDocument = require("./models/policyDocuments");
 
 // Import routes
