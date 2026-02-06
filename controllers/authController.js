@@ -51,10 +51,10 @@ exports.signup = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('[ERROR] Signup Failed:', error.message);
         res.status(500).json({
             success: false,
-            message: 'Internal server error'
+            message: 'Internal server error',
+             error: error.message,
         });
     }
 };
@@ -114,7 +114,8 @@ exports.login = async (req, res) => {
         console.error('[ERROR] Login Failed:', error.message);
         res.status(500).json({
             success: false,
-            message: 'Internal server error'
+            message: 'Internal server error', 
+             error: error.message,
         });
     }
 };
@@ -209,6 +210,7 @@ exports.changePassword = async (req, res) => {
           return res.status(500).json({
               success: false,
               message: 'An error occurred while changing the password.',
+               error: error.message,
           });
       }
 };
@@ -252,7 +254,7 @@ exports.forgotPassword = async (req, res) => {
         }
     } catch (error) {
         console.error('[ERROR] Error generating OTP:', error.message);
-        return res.status(500).json({ success: false, message: 'Error generating OTP' });
+        return res.status(500).json({ success: false, message: 'Error generating OTP',  error: error.message, });
     }
 };
 // 2. Verify OTP
@@ -285,7 +287,7 @@ exports.verifyOtp = async (req, res) => {
         return res.json({ success: true, message: 'OTP verified', token });
     } catch (error) {
         console.error('[ERROR] OTP Verification Failed:', error.message);
-        return res.status(500).json({ success: false, message: 'Verification failed' });
+        return res.status(500).json({ success: false, message: 'Verification failed',  error: error.message, });
     }
 };
 
@@ -330,7 +332,7 @@ exports.resetPassword = async (req, res) => {
             return res.status(401).json({ success: false, message: 'Token has expired' });
         }
         console.error('[ERROR] Password Reset Failed:', error.message);
-        return res.status(500).json({ success: false, message: 'Reset failed' });
+        return res.status(500).json({ success: false, message: 'Reset failed',  error: error.message, });
     }
 };
 

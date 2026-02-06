@@ -59,10 +59,10 @@ exports.uploadPolicyDocument = (req, res) => {
                 },
             });
         } catch (error) {
-            console.error('[ERROR] Uploading PDF:', error.message);
             res.status(500).json({
                 success: false,
                 message: 'Internal server error while uploading PDF.',
+                 error: error.message,
             });
         }
     });
@@ -110,6 +110,7 @@ exports.updatePolicyDocument = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Internal server error.',
+             error: error.message,
         });
     }
 };

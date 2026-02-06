@@ -124,6 +124,7 @@ exports.createSupportManager = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Internal server error.',
+             error: error.message,
         });
     }
 };
@@ -183,6 +184,7 @@ exports.getSupportManagers = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to fetch support managers',
+             error: error.message,
         });
     }
 };
@@ -324,170 +326,3 @@ exports.supportManagerCount = async (req, res) => {
     }
 };
 
-// exports.createSupportManager = async (req, res) => {
-  //     const { name, userId, email, password, imageUrl } = req.body; // Receiving the image path
-  //     // Validate required fields
-  //     if (!name || !userId || !email || !password || !imageUrl) {
-  //       return res.status(400).json({
-  //         success: false,
-  //         message: 'Name, userId, email,image and password are required.',
-  //       });
-  //     }
-    
-  //     try {
-  //       // Check if email or userId already exists
-  //       const existingUser = await SupportManager.findOne({
-  //         where: { email },
-  //       });
-    
-  //       if (existingUser) {
-  //         return res.status(400).json({
-  //           success: false,
-  //           message: 'Email already in use.',
-  //         });
-  //       }
-    
-  //       const existingUserId = await SupportManager.findOne({
-  //         where: { userId },
-  //       });
-    
-  //       if (existingUserId) {
-  //         return res.status(400).json({
-  //           success: false,
-  //           message: 'UserId already in use.',
-  //         });
-  //       }
-    
-  //       // Hash the password
-  //       const hashedPassword = await bcrypt.hash(password, 10);
-    
-  //       // Construct image URL from the provided imagePath
-  //     //   let imageUrl = null;
-  //     //   if (imagePath) {
-  //     //     const protocol = req.protocol;
-  //     //     const host = req.get('host');
-  //     //     imageUrl = `${protocol}://${host}/uploads/supportManagers/${imagePath}`;
-  //     //   }
-    
-  //       // Create the support manager
-  //       const newSupportManager = await SupportManager.create({
-  //         name,
-  //         userId,
-  //         email,
-  //         password: hashedPassword,
-  //         imageUrl // If no imagePath, keep as null
-  //       });
-    
-  //       res.status(201).json({
-  //         success: true,
-  //         message: 'Support Manager account created successfully.',
-  //         data: {
-  //           id: newSupportManager.id,
-  //           name: newSupportManager.name,
-  //           userId: newSupportManager.userId,
-  //           email: newSupportManager.email,
-  //           imageUrl: newSupportManager.imageUrl,
-  //         },
-  //       });
-  //     } catch (error) {
-  //       console.error('[ERROR] Creating Support Manager:', error.message);
-  //       res.status(500).json({
-  //         success: false,
-  //         message: 'Internal server error.',
-  //       });
-  //     }
-  // };  
-  
-  // exports.getSupportManagers = async (req, res) => {
-  //     const { page = 1 } = req.query;  // Get page number from query (default to 1 if not provided)
-  //     const limit = 20;  // Limit per page
-  //     const offset = (page - 1) * limit;  // Calculate the offset
-  
-  //     try {
-  //         // Fetch the total count of support managers
-  //         const totalRecords = await SupportManager.count();
-  
-  //         // Calculate total pages
-  //         const totalPages = Math.ceil(totalRecords / limit);
-  
-  //         // Fetch the managers from the database with pagination
-  //         const supportManagers = await SupportManager.findAll({
-  //             attributes: ['id','imageUrl', 'name', 'userId', 'email', 'password'],  // Selecting the required fields
-  //             limit: limit,  // Pagination limit
-  //             offset: offset,  // Pagination offset
-  //         });
-  
-  //         // Return the result with pagination details
-  //         return res.json({
-  //             success: true,
-  //             data: supportManagers,
-  //             page: parseInt(page),
-  //             limit: limit,
-  //             totalRecords: totalRecords,
-  //             totalPages: totalPages,
-  //         });
-  //     } catch (error) {
-  //         console.error('[ERROR] Fetching Support Managers Failed:', error.message);
-  //         return res.status(500).json({
-  //             success: false,
-  //             message: 'Failed to fetch support managers',
-  //         });
-  //     }
-  // };
-  
-  // exports.updateSupportManager = async (req, res) => {
-  //     const { id, email, name, userId, imageUrl } = req.body; // Exclude fields like status, password, otp, and otpExpiry
-  
-  //     // Validate required fields
-  //     if (!id) {
-  //         return res.status(400).json({
-  //             success: false,
-  //             message: 'ID is required.',
-  //         });
-  //     }
-  
-  //     try {
-  //         // Find the support manager by ID
-  //         const supportManager = await SupportManager.findByPk(id); // Using `findByPk` to find by primary key
-  
-  //         if (!supportManager) {
-  //             return res.status(404).json({
-  //                 success: false,
-  //                 message: 'Support Manager not found.',
-  //             });
-  //         }
-  
-  //         // Update fields only if they are provided in the request
-  //         supportManager.imageUrl = imageUrl || supportManager.imageUrl; // Keep existing value if not provided
-  //         supportManager.email = email || supportManager.email; // Keep existing value if not provided
-  //         supportManager.name = name || supportManager.name;
-  //         supportManager.userId = userId || supportManager.userId;
-  
-  //         await supportManager.save(); // Save the updated support manager
-  
-  //         // Exclude sensitive fields from the response
-  //         const responseData = {
-  //             id: supportManager.id,
-  //             imageUrl: supportManager.imageUrl,
-  //             name: supportManager.name,
-  //             email: supportManager.email,
-  //             userId: supportManager.userId,
-  //             createdAt: supportManager.createdAt,
-  //             updatedAt: supportManager.updatedAt,
-  //         };
-  
-  //         return res.status(200).json({
-  //             success: true,
-  //             message: 'Support Manager updated successfully!',
-  //             data: responseData, // Send filtered response
-  //         });
-  //     } catch (error) {
-  //         console.error('Error updating support manager:', error);
-  //         return res.status(500).json({
-  //             success: false,
-  //             message: 'An error occurred while updating the support manager.',
-  //             error: error.message,
-  //         });
-  //     }
-  // };
-  

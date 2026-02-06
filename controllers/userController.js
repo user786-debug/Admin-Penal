@@ -51,6 +51,7 @@ exports.getAllUsers = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Internal server error',
+             error: error.message,
         });
     }
 };
@@ -104,6 +105,7 @@ exports.getAllStars = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Internal server error',
+             error: error.message,
         });
     }
 };
@@ -140,6 +142,7 @@ exports.toggleUserStatus = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Internal server error',
+             error: error.message,
         });
     }
 }

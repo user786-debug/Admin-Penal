@@ -112,7 +112,7 @@ exports.createStarManager = async (req, res) => {
         });
     } catch (error) {
         console.error('[ERROR] Creating Star Manager:', error.message);
-        res.status(500).json({ success: false, message: 'Internal server error.' });
+        res.status(500).json({ success: false, message: 'Internal server error.',  error: error.message, });
     }
 };
 
@@ -172,6 +172,7 @@ exports.getstarManagers = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to fetch managers',
+             error: error.message,
         });
     }
 };
@@ -250,6 +251,7 @@ exports.updateManager = async (req, res) => {
       return res.status(500).json({
         success: false,
         message: 'Internal server error.',
+         error: error.message,
       });
     }
 };
@@ -279,6 +281,7 @@ exports.deleteManager = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Internal server error',
+             error: error.message,
         });
     }
 };
@@ -309,166 +312,3 @@ exports.starManagerCount = async (req, res) => {
 
 
 
-
-  // Create Support Manager
-// exports.createStarManager = async (req, res) => {
-//     const { name, uId, email, password, imageUrl } = req.body; // Receiving the image path
-//     // Validate required fields
-//     if (!name || !uId || !email || !password || !imageUrl) {
-//       return res.status(400).json({
-//         success: false,
-//         message: 'Name, uId, email,image and password are required.',
-//       });
-//     }
-  
-//     try {
-//       // Check if email or userId already exists
-//       const existingUser = await Manager.findOne({
-//         where: { email },
-//       });
-  
-//       if (existingUser) {
-//         return res.status(400).json({
-//           success: false,
-//           message: 'Email already in use.',
-//         });
-//       }
-  
-//       const existingUserId = await Manager.findOne({
-//         where: { uId },
-//       });
-  
-//       if (existingUserId) {
-//         return res.status(400).json({
-//           success: false,
-//           message: 'UserId already in use.',
-//         });
-//       }
-  
-//       // Hash the password
-//       const hashedPassword = await bcrypt.hash(password, 10);
-  
-//       // Construct image URL from the provided imagePath
-//     //   let imageUrl = null;
-//     //   if (imagePath) {
-//     //     const protocol = req.protocol;
-//     //     const host = req.get('host');
-//     //     imageUrl = `${protocol}://${host}/uploads/supportManagers/${imagePath}`;
-//     //   }
-  
-//       // Create the support manager
-//       const newSupportManager = await Manager.create({
-//         name,
-//         uId,
-//         email,
-//         password: hashedPassword,
-//         imageUrl // If no imagePath, keep as null
-//       });
-  
-//       res.status(201).json({
-//         success: true,
-//         message: 'Support Manager account created successfully.',
-//         data: {
-//           id: newSupportManager.id,
-//           name: newSupportManager.name,
-//           userId: newSupportManager.uId,
-//           email: newSupportManager.email,
-//           imageUrl: newSupportManager.imageUrl,
-//         },
-//       });
-//     } catch (error) {
-//       console.error('[ERROR] Creating Support Manager:', error.message);
-//       res.status(500).json({
-//         success: false,
-//         message: 'Internal server error.',
-//       });
-//     }
-// };
-
-
-// exports.getstarManagers = async (req, res) => {
-//     const { page = 1 } = req.query;  // Get page number from query (default to 1 if not provided)
-//     const limit = 20;  // Limit per page
-//     const offset = (page - 1) * limit;  // Calculate the offset
-
-//     try {
-//         // Fetch the managers from the database with pagination
-//         const managers = await Manager.findAndCountAll({
-//             attributes: ['id', 'name','uId', 'email', 'password',],  // Selecting required fields
-//             limit: limit,  // Pagination limit
-//             offset: offset,  // Pagination offset
-//         });
-
-//         const totalPages = Math.ceil(managers.count / limit); // Calculate total pages
-
-//         return res.json({
-//             success: true,
-//             data: managers.rows,  // Data for the current page
-//             pagination: {
-//                 currentPage: parseInt(page),
-//                 totalPages: totalPages,
-//                 totalRecords: managers.count,
-//                 recordsPerPage: limit
-//             }
-//         });
-//     } catch (error) {
-//         console.error('[ERROR] Fetching Managers Failed:', error.message);
-//         return res.status(500).json({
-//             success: false,
-//             message: 'Failed to fetch managers',
-//         });
-//     }
-// };
-
-
-// exports.updateManager = async (req, res) => {
-//     const { id, email, password, uId, imageUrl } = req.body; // Destructure the fields from body
-    
-//     // Validate required fields
-//     if (!id) {
-//         return res.status(400).json({
-//             success: false,
-//             message: 'ID is required.',
-//         });
-//     }
-
-//     try {
-//         // Find the manager by ID
-//         const manager = await Manager.findByPk(id); // Using `findByPk` to find by primary key
-
-//         if (!manager) {
-//             return res.status(404).json({
-//                 success: false,
-//                 message: 'Manager not found.',
-//             });
-//         }
-
-//         // Update fields only if they are provided in the request
-//         manager.imageUrl = imageUrl || manager.imageUrl;  // Keep existing value if not provided
-//         manager.email = email || manager.email;  // Keep existing value if not provided
-//         manager.password = password || manager.password; // Keep existing password if not provided
-//         manager.uId = uId || manager.uId;  // Update uId only if provided
-
-//         await manager.save(); // Save the updated manager
-
-//         // Exclude fields like password, otp, otpExpiry, status from the response
-//         const managerResponse = manager.toJSON(); // Convert manager instance to plain object
-//         delete managerResponse.password;
-//         delete managerResponse.otp;
-//         delete managerResponse.otpExpiry;
-//         delete managerResponse.status;
-
-//         return res.status(200).json({
-//             success: true,
-//             message: 'Manager updated successfully!',
-//             data: managerResponse,  // Return the updated manager without excluded fields
-//         });
-//     } catch (error) {
-//         console.error('Error updating manager:', error);
-//         return res.status(500).json({
-//             success: false,
-//             message: 'An error occurred while updating the manager.',
-//             error: error.message,
-//         });
-//     }
-// };
