@@ -113,6 +113,7 @@ const Star = sequelize.define('Star', {
 }, {
     timestamps: true,
     paranoid: true, // Enable soft deletes
+    tableName: 'stars', // Optional: Explicit table name
 });
 
 // Star.hasMany(StarPlatform, { foreignKey: 'userId', sourceKey: 'userId' });
