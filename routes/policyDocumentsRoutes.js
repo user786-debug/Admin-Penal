@@ -8,6 +8,6 @@ const uploade = multer();
 const router = express.Router();
 router.post('/upload',authenticate, uploadPolicyDocument); 
 router.put('/update',authenticate, uploade.none(), updatePolicyDocument); 
-router.get('/all', authenticate, getAllPolicyDocuments); 
+router.get('/all',  getAllPolicyDocuments); 
 
 module.exports = router;

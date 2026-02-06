@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.post('/image',authenticate,upload.single('image'), uploadImage);  
 router.post('/addnew',authenticate,uploade.none(),validateSupportManager,handleValidationErrors, createSupportManager);  
-router.get('/all',authenticate, getSupportManagers);  
+router.get('/all', getSupportManagers);  
 router.get('/count',authenticate, supportManagerCount);  
 router.put('/update',authenticate,upload.none(), updateSupportManager);  
 router.delete('/delete/:id',authenticate, deleteSupportManager);  

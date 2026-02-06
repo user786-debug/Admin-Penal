@@ -7,8 +7,8 @@ const upload = multer();
 
 const router = express.Router();
 router.post('/add',authenticate, upload.none(), addVersion);
-router.get('/android',authenticate, upload.none(), getAndroidVersions);
-router.get('/ios',authenticate, upload.none(), getIosVersions);
+router.get('/android',authenticate,  getAndroidVersions);
+router.get('/ios',authenticate,  getIosVersions);
 router.put('/update',authenticate, upload.none(), updateVersionStatus);
 
 module.exports = router;
